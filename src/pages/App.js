@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-
-function useNotifications() {
-  // Define la función notify aquí
-  const notify = (message) => {
-    alert(message);
-  };
-
-  return { notify };
-}
+import useNotifications from "./notificacion";
 
 function App() {
   const [data, setData] = useState(null);
@@ -16,13 +8,14 @@ function App() {
   const [name, setProducto] = useState("");
   const [price, setPrecio] = useState("");
 
-  const { notify } = useNotifications(); // Utiliza el hook useNotifications para obtener la función notify
+  const { notify } = useNotifications(); 
 
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io("http://34.234.26.214:5000");
     socket.on("receiveData", (orden) => {
       console.log(orden);
-      notify("Pago realizado: " + JSON.stringify(orden));
+      
+      alert("Se realizó el pago: " + JSON.stringify(orden));
     });
 
     return () => {
@@ -33,7 +26,7 @@ function App() {
   const handleClick = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:15672/api/order", {
+      const response = await fetch("http://54.211.244.76:3000/api/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
