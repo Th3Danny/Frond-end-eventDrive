@@ -19,7 +19,7 @@ function App() {
   
     socket.on("disconnect", () => {
       console.log("Conexión perdida, intentando reconectar...");
-      // Intenta reconectar después de un breve retraso
+      
       setTimeout(() => {
         socket.connect();
       }, 1000);
