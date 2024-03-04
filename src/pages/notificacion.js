@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function useNotifications() {
-  const [notification, setNotification] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
   const notify = (message) => {
-    setNotification(message);
-
-    setTimeout(() => {
-      setNotification(null);
-    }, 5000); 
+    setNotifications([...notifications, message]);
   };
 
-  return { notification, notify };
+  useEffect(() => {
+    if (notifications.length > 0) {
+      const timer = setTimeout(() => {
+        setNotifications(notifications.slice(1));
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [notifications]);
+
+  return { notifications, notify };
 }
 
 export default useNotifications;

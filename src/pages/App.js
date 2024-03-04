@@ -12,16 +12,35 @@ function App() {
 
   useEffect(() => {
     const socket = io("http://34.234.26.214:5000");
+    
+    socket.on("connect", () => {
+      console.log("Conexión establecida");
+    });
+  
+    socket.on("disconnect", () => {
+      console.log("Conexión perdida, intentando reconectar...");
+      // Intenta reconectar después de un breve retraso
+      setTimeout(() => {
+        socket.connect();
+      }, 1000);
+    });
+  
     socket.on("receiveData", (orden) => {
       console.log(orden);
-      
       alert("Se realizó el pago: " + JSON.stringify(orden));
     });
-
+  
+    // Manejo de errores
+    socket.on("error", (error) => {
+      console.error("Error en la conexión WebSocket:", error);
+    });
+  
     return () => {
+      console.log("Desconectando socket");
       socket.disconnect();
     };
-  }, [notify]);
+  }, []);
+  
 
   const handleClick = async () => {
     try {
